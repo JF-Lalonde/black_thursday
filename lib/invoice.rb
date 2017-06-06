@@ -7,17 +7,23 @@ class Invoice
                 :status,
                 :created_at,
                 :updated_at,
-                :all_invoice_data
+                :invoice_repo
 
   def initialize(invoice_data, invoice_repo)
     @id = invoice_data[:id].to_i
     @customer_id = invoice_data[:customer_id].to_i
     @merchant_id = invoice_data[:merchant_id].to_i
-    @status = invoice_data[:status]
-    @created_at = invoice_data[:created_at]
-    @updated_at = invoice_data[:updated_at]
-    @all_invoice_data = all_invoice_data
+    @status = invoice_data[:status].to_sym
+    @created_at = Time.parse(invoice_data[:created_at].to_s)
+    @updated_at = Time.parse(invoice_data[:updated_at].to_s)
+    @invoice_repo = invoice_repo
   end
+
+  def merchant
+    @invoice_repo.invoice_middle_output(self.merchant_id)
+    # require 'pry'; binding.pry
+  end
+
 
 end
 

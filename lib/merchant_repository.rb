@@ -36,4 +36,8 @@ class MerchantRepository
   def item_output(merch_id)
     @sales_engine.item_output(merch_id)
   end
+
+  def invoice_output(invoice_id)
+    @sales_engine.merch_out_from_invoice(invoice_id)
+  end
 end
