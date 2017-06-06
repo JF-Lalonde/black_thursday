@@ -19,7 +19,7 @@ class Invoice
     @all_invoice_data = all_invoice_data
   end
 
+  def items
+    # @invoice_repo.items_to_engine(id)
+  end
 end
-
-# se = SalesEngine.from_csv({:invoices => "./data/invoices.csv"})
-# invoice = se.invoices.find_by_id(6)

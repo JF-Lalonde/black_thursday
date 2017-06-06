@@ -5,7 +5,7 @@ class CustomerRepositoryTest < Minitest::Test
   attr_reader :cr
 
   def setup
-    @cr = CustomerRepository.new("./test/data/customers_truncated.csv", self)
+    @cr = CustomerRepository.new({customers: "./test/data/customers_truncated.csv"}, self)
   end
 
   def test_customer_repo_instantiates

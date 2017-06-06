@@ -8,6 +8,10 @@ class InvoiceRepository
   attr_reader :sales_engine,
               :all_invoice_data
 
+  # def inspect
+  #   "#<#{self.class} #{@items.size} rows>"
+  # end
+
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
     all_invoices = open_csv(data_files[:invoices])
@@ -32,6 +36,10 @@ class InvoiceRepository
 
   def find_all_by_status(status)
     @all_invoice_data.find_all{|invoice| invoice.status == status}
+  end
+
+  def items_to_engine(id)
+    @sales_engine.invoice_output(id)
   end
 
 end

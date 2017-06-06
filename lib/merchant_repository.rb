@@ -7,9 +7,9 @@ class MerchantRepository
   attr_reader :all_merchant_data,
               :sales_engine
 
-  def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
-  end
+  # def inspect
+  #   "#<#{self.class} #{@merchants.size} rows>"
+  # end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
@@ -26,7 +26,7 @@ class MerchantRepository
   end
 
   def find_by_name(name)
-    @all_merchant_data.find{|merchant| merchant.name == name.downcase}
+    @all_merchant_data.find{|merchant| merchant.name.downcase == name.downcase}
   end
 
   def find_all_by_name(name)
