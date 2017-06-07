@@ -7,9 +7,9 @@ class MerchantRepository
   attr_reader :all_merchant_data,
               :sales_engine
 
-  def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
-  end
+  # def inspect
+  #   "#<#{self.class} #{@merchants.size} rows>"
+  # end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
@@ -37,7 +37,7 @@ class MerchantRepository
     @sales_engine.item_output(merch_id)
   end
 
-  def invoice_output(invoice_id)
-    @sales_engine.merch_out_from_invoice(invoice_id)
+  def invoice_output(id)
+    @sales_engine.merch_out_from_invoice(id)
   end
 end

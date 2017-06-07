@@ -7,9 +7,9 @@ class CustomerRepository
   attr_reader :sales_engine,
               :all_customer_data
 
-  def inspect
-    "#<#{self.class} #{@items.size} rows>"
-  end
+  # def inspect
+  #   "#<#{self.class} #{@items.size} rows>"
+  # end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
@@ -33,7 +33,7 @@ class CustomerRepository
     @all_customer_data.find_all{|cust|  /#{name}/i =~ cust.last_name}
   end
 
-  def merch(id)
-    @sales_engine.customer_output(id)
-  end
+  # def merch(id)
+  #   @sales_engine.customer_output(id)
+  # end
 end

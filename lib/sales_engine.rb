@@ -43,8 +43,8 @@ class SalesEngine
     @merchants.find_by_id(id)
   end
 
-  def merch_out_from_invoice(invoice_id)
-    @invoices.find_all_by_merchant_id(invoice_id)
+  def merch_out_from_invoice(id)
+    @invoices.find_all_by_merchant_id(id)
   end
 
 end

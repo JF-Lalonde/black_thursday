@@ -21,11 +21,6 @@ class Invoice
 
   def merchant
     @invoice_repo.invoice_middle_output(self.merchant_id)
-    # require 'pry'; binding.pry
+    #name methods the same
   end
-
-
 end
-
-# se = SalesEngine.from_csv({:invoices => "./data/invoices.csv"})
-# invoice = se.invoices.find_by_id(6)
