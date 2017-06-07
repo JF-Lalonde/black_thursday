@@ -153,6 +153,24 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 0, actual.count
   end
 
+  def test_average_sales_per_day
+    invoice_dates = @sa.sales_engine.invoices.all_invoice_data.map do |invoice|
+      invoice.created_at.strftime("%A")
+    end
+    day_count = invoice_dates.reduce(Hash.new(0)){|days, num| days[num] += 1; days}
+    actual = day_count.values.reduce(:+)/ 7
+
+    assert_equal 71, actual
+  end
+
+  def test_average_sales_per_day_std_dev
+    mean = @sa.average_sales_per_day
+    sum = @sa.day_count.values.reduce(0){|sum, num| sum + (num - mean)**2}
+    actual = Math.sqrt(sum / 6).round(2)
+
+    assert_equal 7.81, actual
+  end
+
   def test_top_days_by_invoice_count
 
   end

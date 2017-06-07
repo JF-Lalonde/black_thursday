@@ -6,7 +6,8 @@ class SalesAnalyst
               :avg_items,
               :avg_prices_per_merch,
               :all_item_prices,
-              :invoices_per_merch
+              :invoices_per_merch,
+              :day_count
 
   def initialize(sales_engine)
     @sales_engine = sales_engine
@@ -107,6 +108,18 @@ class SalesAnalyst
     @sales_engine.merchants.all_merchant_data.find_all do |merchant|
       (mean - merchant.invoices.count) > (average_invoices_per_merchant_standard_deviation*2)
     end
+  end
+
+  def average_sales_per_day
+    invoice_dates = @sales_engine.invoices.all_invoice_data.map do |invoice|
+      invoice.created_at.strftime("%A")
+    end
+    @day_count = invoice_dates.reduce(Hash.new(0)){|days, num| days[num] += 1; days}
+    day_count.values.reduce(:+)/ 7
+  end
+
+  def average_sales_per_day_standard_deviation
+
   end
 
   def top_days_by_invoice_count
