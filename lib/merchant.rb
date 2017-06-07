@@ -14,4 +14,8 @@ class Merchant
   def items
     @merch_repo.item_output(id)
   end
+
+  def invoices
+    @merch_repo.invoice_output(id)
+  end
 end

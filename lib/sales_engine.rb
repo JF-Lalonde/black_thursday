@@ -43,4 +43,12 @@ class SalesEngine
     invoice_items_list = @invoice_items.find_all_by_invoice_id(id)
   end
 
+  def invoice_output(id)
+    @merchants.find_by_id(id)
+  end
+
+  def merch_out_from_invoice(id)
+    @invoices.find_all_by_merchant_id(id)
+  end
+
 end

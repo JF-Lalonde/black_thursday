@@ -50,7 +50,7 @@ class InvoiceRepositoryTest < Minitest::Test
   end
 
   def test_it_can_find_all_by_status
-    actual = @invoice.find_all_by_status("pending").count
+    actual = @invoice.find_all_by_status(:pending).count
     expected = 162
 
     assert_equal expected, actual

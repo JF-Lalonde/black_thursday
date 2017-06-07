@@ -18,7 +18,7 @@ class Customer
     @customer_repo = customer_repo
   end
 
-  def merchants
-    @customer_repo.merch(id)
-  end
+  # def merchants
+  #   @customer_repo.merch(id)
+  # end
 end

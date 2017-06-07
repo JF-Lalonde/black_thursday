@@ -17,15 +17,10 @@ class InvoiceTest < Minitest::Test
   end
 
   def test_it_exists
-    @invoice
-
-    assert_instance_of Invoice, actual
+    assert_instance_of Invoice, @invoice
   end
 
-  def test_it_contains_all_invoice_data
-    actual = @invoice.all
-    expected = @all_invoice_data
-
-    assert_equal expected, actual
+  def test_attr_reader_works
+    assert_equal 8, @invoice.merchant_id
   end
 end

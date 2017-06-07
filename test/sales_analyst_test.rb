@@ -8,9 +8,13 @@ class SalesAnalystTest < Minitest::Test
 
   def setup
     sales_engine = SalesEngine.from_csv({
-      :items     => "./test/data/items_truncated.csv",
-      :merchants => "./test/data/merchants_truncated.csv"
-    })
+          :items => "./test/data/items_truncated.csv",
+          :merchants => "./test/data/merchants_truncated.csv",
+          :invoice_items => "./test/data/invoice_items_truncated.csv",
+          :invoices => "./test/data/invoices_truncated.csv",
+          :transactions => "./test/data/transactions_truncated.csv",
+          :customers => "./test/data/customers_truncated.csv"
+        })
     @sa = SalesAnalyst.new(sales_engine)
   end
 
@@ -110,7 +114,87 @@ class SalesAnalystTest < Minitest::Test
     actual = @sa.sales_engine.items.all_item_data.find_all do |item|
       (item.unit_price - mean) > (@sa.standard_deviation_of_prices * 2)
     end
+
     assert_equal 1, actual.count
   end
 
+  def test_average_invoices_per_merchant
+    invoices_per_merch =
+    @sa.sales_engine.merchants.all_merchant_data.map{|merchant| merchant.invoices.count}
+    actual = invoices_per_merch.reduce{|sum, num| sum + num}.to_f / invoices_per_merch.count
+
+    assert_equal 1.04, actual
+  end
+
+  def test_standard_deviation_of_invoices_per_merchant
+    mean = @sa.average_invoices_per_merchant
+    sum = @sa.invoices_per_merch.reduce(0){|sum, num| sum + (num - mean)**2}
+    actual = Math.sqrt(sum/(@sa.invoices_per_merch.count - 1)).round(2)
+
+    assert_equal 0.9, actual
+  end
+
+  def test_top_merchants_by_invoice_count
+    mean = @sa.average_invoices_per_merchant
+    actual = @sa.sales_engine.merchants.all_merchant_data.find_all do |merchant|
+      (merchant.invoices.count - mean) > (@sa.average_invoices_per_merchant_standard_deviation * 2)
+    end
+
+    assert_equal 4, actual.count
+    assert_equal Merchant, actual[0].class
+  end
+
+  def test_bottom_merchants_by_invoice_count
+    mean = @sa.average_invoices_per_merchant
+    actual = @sa.sales_engine.merchants.all_merchant_data.find_all do |merchant|
+      (mean - merchant.invoices.count) > (@sa.average_invoices_per_merchant_standard_deviation*2)
+    end
+
+    assert_equal 0, actual.count
+  end
+
+  def test_average_sales_per_day
+    invoice_dates = @sa.sales_engine.invoices.all_invoice_data.map do |invoice|
+      invoice.created_at.strftime("%A")
+    end
+    day_count = invoice_dates.reduce(Hash.new(0)){|days, num| days[num] += 1; days}
+    actual = day_count.values.reduce(:+)/ 7
+
+    assert_equal 71, actual
+  end
+
+  def test_average_sales_per_day_std_dev
+    mean = @sa.average_sales_per_day
+    sum = @sa.day_count.values.reduce(0){|sum, num| sum + (num - mean)**2}
+    actual = Math.sqrt(sum / 6).round(2)
+
+    assert_equal 7.81, actual
+  end
+
+  def test_top_days_by_invoice_count
+    mean = @sa.average_sales_per_day
+    actual = @sa.day_count.find_all do |day, num|
+      (num - mean) > @sa.average_sales_per_day_standard_deviation
+    end
+
+    actual = actual.map do |day|
+      (day.join.to_s[0..-3]).split
+    end.flatten
+
+    assert_equal ["Sunday"], actual
+  end
+
+  def test_invoice_status
+    invoice_status = @sa.sales_engine.invoices.all.map do |invoice|
+      invoice.status
+    end
+    invoice_status = invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
+    sum = invoice_status.values.inject(:+)
+    actual = invoice_status.each_with_object(Hash.new(0)) do |(stat, num), hash|
+      hash[stat] = num * 100.0 / sum
+    end
+    expected = {:pending=>32.4, :shipped=>54.4, :returned=>13.2}
+    
+    assert_equal expected, actual
+  end
 end

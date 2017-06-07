@@ -7,6 +7,7 @@ class SalesEngineTest < Minitest::Test
           :items => "./test/data/items_truncated.csv",
           :merchants => "./test/data/merchants_truncated.csv",
           :invoice_items => "./test/data/invoice_items_truncated.csv",
+          :invoices => "./test/data/invoices_truncated.csv",
           :transactions => "./test/data/transactions_truncated.csv",
           :customers => "./test/data/customers_truncated.csv",
           :invoices => "./test/data/invoices_truncated.csv"
@@ -56,13 +57,14 @@ class SalesEngineTest < Minitest::Test
     assert_equal Item, actual
   end
 
-  def test_if_merchants_method_links_to_merchant_class
-    customer = @se.customers.find_by_id(30)
-    actual = customer.merchants.class
-    require 'pry'; binding.pry
+  def test_if_invoices_method_in_merchants_call_invoices
+    merchant = @se.merchants.find_by_id(12334159)
+    actual = merchant.invoices[0].class
+    expected = Invoice
 
-    assert_equal Merchant, actual
+    assert_equal expected, actual
   end
+
 
   # def test_if_customers_method_links_to_merchant_class
   #   skip
@@ -76,4 +78,27 @@ class SalesEngineTest < Minitest::Test
     invoice = @se.invoices.find_by_id(20)
     invoice.items
   end
+  
+  def test_if_merchant_method_in_invoices_returns_merchant
+    invoice = @se.invoices.find_by_id(234)
+    actual = invoice.merchant.class
+
+    assert_equal Merchant, actual
+
+  end
+
+  # def test_if_customers_method_links_to_merchant_class
+  #   skip
+  #   merchant = @se.merchants.find_by_id(12335938)
+  #   actual = merchant.customers
+  #
+  #   assert_equal Merchant, actual
+  # end
+
+  # def test_if_merchants_method_links_to_merchant_class
+  #   customer = @se.customers.find_by_id(30)
+  #   actual = customer.merchants.class
+  #
+  #   assert_equal Merchant, actual
+  # end
 end
