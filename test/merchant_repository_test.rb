@@ -7,8 +7,8 @@ class MerchantRepositoryTest < Minitest::Test
 
   def setup
     @merchant = MerchantRepository.new({
-      :items     => "./data/items.csv",
-      :merchants => "./data/merchants.csv"
+      :items     => "./test/data/items_truncated.csv",
+      :merchants => "./test/data/merchants_truncated.csv"
       }, self)
   end
 

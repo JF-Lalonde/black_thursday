@@ -9,6 +9,7 @@ class InvoiceRepository
               :all_invoice_data
 
   # def inspect
+  #   "#<#{self.class} #{@items.size} rows>"
   #   "#<#{self.class} #{@merchants.size} rows>"
   # end
 
@@ -38,6 +39,10 @@ class InvoiceRepository
     @all_invoice_data.find_all{|invoice| invoice.status == status}
   end
 
+
+  def items_to_engine(id)
+  end
+  
   def invoice_middle_output(id)
     @sales_engine.invoice_output(id)
   end

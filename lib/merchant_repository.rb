@@ -26,7 +26,7 @@ class MerchantRepository
   end
 
   def find_by_name(name)
-    @all_merchant_data.find{|merchant| merchant.name == name.downcase}
+    @all_merchant_data.find{|merchant| merchant.name.downcase == name.downcase}
   end
 
   def find_all_by_name(name)

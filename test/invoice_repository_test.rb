@@ -8,8 +8,8 @@ class InvoiceRepositoryTest < Minitest::Test
 
   def setup
     @invoice = InvoiceRepository.new({
-  :items => "./data/items.csv",
-  :merchants => "./data/merchants.csv",
+  :items => "./test/data/items_truncated.csv",
+  :merchants => "./test/data/merchants_truncated.csv",
   :invoices => "./test/data/invoices_truncated.csv"
   }, self)
   end

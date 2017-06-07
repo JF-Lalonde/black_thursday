@@ -19,6 +19,10 @@ class Invoice
     @invoice_repo = invoice_repo
   end
 
+  def items
+    # @invoice_repo.items_to_engine(id)
+    end
+    
   def merchant
     @invoice_repo.invoice_middle_output(self.merchant_id)
     #name methods the same
