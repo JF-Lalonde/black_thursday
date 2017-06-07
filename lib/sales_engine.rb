@@ -35,20 +35,23 @@ class SalesEngine
     @items.find_all_by_merchant_id(merch_id)
   end
 
-  # def customer_output(id)
-  #   @merchants.find_by_id(id)
-  # end
-
-  def invoice_output(id)
-    invoice_items_list = @invoice_items.find_all_by_invoice_id(id)
-  end
-
   def invoice_output(id)
     @merchants.find_by_id(id)
   end
 
   def merch_out_from_invoice(id)
     @invoices.find_all_by_merchant_id(id)
+  end
+
+  def items_from_invoice(id)
+    invoice_items = @invoice_items.find_all_by_invoice_id(id)
+    item_ids = invoice_items.map{|item| item.item_id}
+    items_for_invoice =
+    item_ids.map{|item| @items.find_by_id(item)}.compact
+  end
+
+  def transactions_from_invoice(id)
+    @transactions.find_all_by_invoice_id(id)
   end
 
 end

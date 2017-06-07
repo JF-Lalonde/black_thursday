@@ -39,12 +39,16 @@ class InvoiceRepository
     @all_invoice_data.find_all{|invoice| invoice.status == status}
   end
 
-
-  def items_to_engine(id)
+  def items_from_invoice(id)
+    @sales_engine.items_from_invoice(id)
   end
-  
+
   def invoice_middle_output(id)
     @sales_engine.invoice_output(id)
+  end
+
+  def transactions_from_invoice(id)
+    @sales_engine.transactions_from_invoice(id)
   end
 
 end
