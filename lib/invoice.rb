@@ -35,4 +35,12 @@ class Invoice
   def customer
     @invoice_repo.customer_from_invoice(id)
   end
+
+  def is_paid_in_full?
+
+  end
+
+  def total
+
+  end
 end

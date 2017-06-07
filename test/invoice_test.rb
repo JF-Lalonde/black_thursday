@@ -23,4 +23,12 @@ class InvoiceTest < Minitest::Test
   def test_attr_reader_works
     assert_equal 8, @invoice.merchant_id
   end
+
+  def test_if_invoice_is_paid_in_full
+
+  end
+
+  def test_invoice_total
+
+  end
 end
