@@ -92,4 +92,25 @@ class SalesEngineTest < Minitest::Test
 
     assert_equal Customer, actual
   end
+
+  def test_if_invoice_from_transaction_returns_invoice
+    transaction = @se.transactions.find_by_id(40)
+    actual = transaction.invoice.class
+
+    assert_equal Invoice, actual
+  end
+
+  def test_if_customer_from_merchant_returns_customers
+    merchant = @se.merchants.find_by_id(12334105)
+    actual = merchant.customers[0].class
+
+    assert_equal Customer, actual
+  end
+
+  def test_if_merchant_from_customer_returns_merchant
+    customer = @se.customers.find_by_id(1)
+    actual = customer.merchants[0].class
+
+    assert_equal Merchant, actual
+  end
 end

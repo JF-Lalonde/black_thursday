@@ -40,4 +40,8 @@ class MerchantRepository
   def invoice_output(id)
     @sales_engine.merch_out_from_invoice(id)
   end
+
+  def customers_from_merchant(id)
+    @sales_engine.customers_from_merchant(id)
+  end
 end

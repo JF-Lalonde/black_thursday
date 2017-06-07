@@ -46,7 +46,6 @@ class SalesEngine
   def items_from_invoice(id)
     invoice_items = @invoice_items.find_all_by_invoice_id(id)
     item_ids = invoice_items.map{|item| item.item_id}
-    items_for_invoice =
     item_ids.map{|item| @items.find_by_id(item)}.compact
   end
 
@@ -58,4 +57,19 @@ class SalesEngine
     @customers.find_by_id(id)
   end
 
+  def invoice_from_transaction(invoice_id)
+    @invoices.find_by_id(invoice_id)
+  end
+
+  def customers_from_merchant(id)
+    invoices = @invoices.find_all_by_merchant_id(id)
+    customer_ids = invoices.map{|invoice| invoice.customer_id}
+    customer_ids.map{|id| @customers.find_by_id(id)}.compact
+  end
+
+  def merchants_from_customer(id)
+    invoices = @invoices.find_all_by_customer_id(id)
+    merch_ids = invoices.map{|invoice| invoice.merchant_id}
+    merch_ids.map{|id| @merchants.find_by_id(id)}.compact
+  end
 end

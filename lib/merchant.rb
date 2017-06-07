@@ -18,4 +18,8 @@ class Merchant
   def invoices
     @merch_repo.invoice_output(id)
   end
+
+  def customers
+    @merch_repo.customers_from_merchant(id)
+  end
 end

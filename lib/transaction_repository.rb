@@ -37,4 +37,7 @@ class TransactionRepository
     @all_transactions.find_all{|trans| trans.result == result}
   end
 
+  def invoice_from_transaction(invoice_id)
+    @sales_engine.invoice_from_transaction(invoice_id)
+  end
 end

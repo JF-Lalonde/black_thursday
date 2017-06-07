@@ -33,7 +33,7 @@ class CustomerRepository
     @all_customer_data.find_all{|cust|  /#{name}/i =~ cust.last_name}
   end
 
-  # def merch(id)
-  #   @sales_engine.customer_output(id)
-  # end
+  def merchants_from_customer(id)
+    @sales_engine.merchants_from_customer(id)
+  end
 end
