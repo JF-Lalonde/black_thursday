@@ -31,4 +31,8 @@ class Invoice
   def transactions
     @invoice_repo.transactions_from_invoice(id)
   end
+
+  def customer
+    @invoice_repo.customer_from_invoice(id)
+  end
 end

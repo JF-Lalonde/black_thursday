@@ -86,18 +86,10 @@ class SalesEngineTest < Minitest::Test
     assert_equal Transaction, actual
   end
 
-  # def test_if_customers_method_links_to_merchant_class
-  #   skip
-  #   merchant = @se.merchants.find_by_id(12335938)
-  #   actual = merchant.customers
-  #
-  #   assert_equal Merchant, actual
-  # end
+  def test_if_customer_from_invoice_returns_customers
+    invoice = @se.invoices.find_by_id(14)
+    actual = invoice.customer.class
 
-  # def test_if_merchants_method_links_to_merchant_class
-  #   customer = @se.customers.find_by_id(30)
-  #   actual = customer.merchants.class
-  #
-  #   assert_equal Merchant, actual
-  # end
+    assert_equal Customer, actual
+  end
 end

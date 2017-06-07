@@ -51,4 +51,8 @@ class InvoiceRepository
     @sales_engine.transactions_from_invoice(id)
   end
 
+  def customer_from_invoice(id)
+    @sales_engine.customer_from_invoice(id)
+  end
+
 end
