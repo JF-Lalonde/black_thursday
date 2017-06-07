@@ -172,6 +172,12 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_top_days_by_invoice_count
+    mean = @sa.average_sales_per_day
+    actual = @sa.day_count.find_all do |day, num|
+      (num - mean) > (@sa.average_sales_per_day_standard_deviation)
+    end
+    actual = (actual[0].join.to_s[0..-3]).split
 
+    assert_equal ["Sunday"], actual
   end
 end

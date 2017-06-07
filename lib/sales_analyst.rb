@@ -119,7 +119,9 @@ class SalesAnalyst
   end
 
   def average_sales_per_day_standard_deviation
-
+    mean = average_sales_per_day
+    sum = @day_count.values.reduce(0){|sum, num| sum + (num - mean)**2}
+    Math.sqrt(sum / 6).round(2)
   end
 
   def top_days_by_invoice_count
