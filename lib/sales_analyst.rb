@@ -5,7 +5,8 @@ class SalesAnalyst
   attr_reader :sales_engine,
               :avg_items,
               :avg_prices_per_merch,
-              :all_item_prices
+              :all_item_prices,
+              :invoices_per_merch
 
   def initialize(sales_engine)
     @sales_engine = sales_engine
@@ -19,14 +20,14 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant_standard_deviation
-    mean = self.average_items_per_merchant
+    mean = average_items_per_merchant
     sum = @avg_items.reduce(0){|sum, num| sum + (num - mean)**2}
-    Math.sqrt(sum/(@avg_items.count - 1)).round(2)
+    Math.sqrt(sum / (@avg_items.count - 1)).round(2)
   end
 
   def merchants_with_high_item_count
-    mean = self.average_items_per_merchant
-    std_dev = self.average_items_per_merchant_standard_deviation
+    mean = average_items_per_merchant
+    std_dev = average_items_per_merchant_standard_deviation
     @sales_engine.merchants.all_merchant_data.find_all do |merchant|
       merchant.items.count > (mean + std_dev)
     end
@@ -54,8 +55,8 @@ class SalesAnalyst
     end
     @avg_prices_per_merch = []
     merch_ids.each do |merchant_id|
-      if self.average_item_price_for_merchant(merchant_id) != nil
-        @avg_prices_per_merch << self.average_item_price_for_merchant(merchant_id)
+      if average_item_price_for_merchant(merchant_id) != nil
+        @avg_prices_per_merch << average_item_price_for_merchant(merchant_id)
       end
     end
       (avg_prices_per_merch.reduce(:+) / avg_prices_per_merch.count).round(2)
@@ -68,17 +69,48 @@ class SalesAnalyst
   end
 
   def standard_deviation_of_prices
-    mean = self.average_item_price_overall
+    mean = average_item_price_overall
     sum = @all_item_prices.reduce(0){|sum, num| sum + (num - mean)**2}
-    std_dev = Math.sqrt(sum/(@all_item_prices.count - 1)).round(2)
+    std_dev = Math.sqrt(sum / (@all_item_prices.count - 1)).round(2)
   end
 
   def golden_items
-    mean = self.average_item_price_overall
-    std_dev = self.standard_deviation_of_prices
+    mean = average_item_price_overall
+    std_dev = standard_deviation_of_prices
     @sales_engine.items.all_item_data.find_all do |item|
       (item.unit_price - mean) > (std_dev * 2)
     end
+  end
+
+  def average_invoices_per_merchant
+    @invoices_per_merch =
+    @sales_engine.merchants.all_merchant_data.map{|merchant| merchant.invoices.count}
+    invoices_per_merch.reduce{|sum, num| sum + num}.to_f /
+    invoices_per_merch.count
+  end
+
+  def average_invoices_per_merchant_standard_deviation
+    mean = average_invoices_per_merchant
+    sum = @invoices_per_merch.reduce(0){|sum, num| sum + (num - mean)**2}
+    Math.sqrt(sum / (@invoices_per_merch.count - 1)).round(2)
+  end
+
+  def top_merchants_by_invoice_count
+    mean = average_invoices_per_merchant
+    @sales_engine.merchants.all_merchant_data.find_all do |merchant|
+      (merchant.invoices.count - mean) > (average_invoices_per_merchant_standard_deviation * 2)
+    end
+  end
+
+  def bottom_merchants_by_invoice_count
+    mean = average_invoices_per_merchant
+    @sales_engine.merchants.all_merchant_data.find_all do |merchant|
+      (mean - merchant.invoices.count) > (average_invoices_per_merchant_standard_deviation*2)
+    end
+  end
+
+  def top_days_by_invoice_count
+
   end
 end
 
