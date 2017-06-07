@@ -124,8 +124,14 @@ class SalesAnalyst
     Math.sqrt(sum / 6).round(2)
   end
 
-  def top_days_by_invoice_count
-
+  def top_days_by_invoice_count #Fix this later
+    mean = average_sales_per_day
+    days = @sa.day_count.find_all do |day, num|
+      (num - mean) > average_sales_per_day_standard_deviation
+    end
+    days = days.map do |day|
+      (day.join.to_s[0..-3]).split
+    end.flatten
   end
 end
 

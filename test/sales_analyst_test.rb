@@ -174,10 +174,27 @@ class SalesAnalystTest < Minitest::Test
   def test_top_days_by_invoice_count
     mean = @sa.average_sales_per_day
     actual = @sa.day_count.find_all do |day, num|
-      (num - mean) > (@sa.average_sales_per_day_standard_deviation)
+      (num - mean) > @sa.average_sales_per_day_standard_deviation
     end
-    actual = (actual[0].join.to_s[0..-3]).split
+
+    actual = actual.map do |day|
+      (day.join.to_s[0..-3]).split
+    end.flatten
 
     assert_equal ["Sunday"], actual
+  end
+
+  def test_invoice_status
+    invoice_status = @sa.sales_engine.invoices.all.map do |invoice|
+      invoice.status
+    end
+    invoice_status = invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
+    sum = invoice_status.values.inject(:+)
+    actual = invoice_status.each_with_object(Hash.new(0)) do |(stat, num), hash|
+      hash[stat] = num * 100.0 / sum
+    end
+    expected = {:pending=>32.4, :shipped=>54.4, :returned=>13.2}
+    
+    assert_equal expected, actual
   end
 end
