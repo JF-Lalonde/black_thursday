@@ -5,7 +5,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
   attr_reader :ir
 
   def setup
-    @ir = InvoiceItemRepository.new({invoices: "./test/data/invoice_items_truncated.csv"}, self)
+    @ir = InvoiceItemRepository.new({invoice_items: "./test/data/invoice_items_truncated.csv"}, sales_engine = nil)
   end
 
   def test_invoice_item_repo_instantiates

@@ -77,13 +77,21 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 29, avg_item_price
   end
 
-  def test_average_average_price_per_merchant
+  def test_find_all_merchant_ids
     merchants = @sa.sales_engine.merchants.all
-    merch_ids = merchants.map do |merchant|
+    actual = merchants.map do |merchant|
       merchant.id.to_i
     end
+    actual = actual.count
+    assert_equal 50, actual
+
+    actual = actual.class
+    assert_equal Fixnum, actual
+  end
+
+  def test_average_average_price_per_merchant
     avg_prices = []
-    merch_ids.each do |merchant_id|
+    @sa.find_all_merchant_ids.each do |merchant_id|
       if @sa.average_item_price_for_merchant(merchant_id) != nil
         avg_prices << @sa.average_item_price_for_merchant(merchant_id)
       end

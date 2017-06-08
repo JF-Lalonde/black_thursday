@@ -41,24 +41,23 @@ class SalesAnalyst
       end
   end
 
-  def average_average_price_per_merchant #Needs refactoring
+  def find_all_merchant_ids
     merchants = sales_engine.merchants.all
-    merch_ids = merchants.map do |merchant|
-      merchant.id.to_i
-    end
-    @avg_prices_per_merch = []
-    merch_ids.each do |merchant_id|
+    merch_ids = merchants.map{|merchant| merchant.id.to_i}
+  end
+
+  def average_average_price_per_merchant
+    @avg_prices_per_merch = Array.new
+    find_all_merchant_ids.each{|merchant_id|
       if average_item_price_for_merchant(merchant_id) != nil
         avg_prices_per_merch << average_item_price_for_merchant(merchant_id)
-      end
-    end
+      end}
       (avg_prices_per_merch.reduce(:+) / avg_prices_per_merch.count).round(2)
   end
 
   def average_item_price_overall
     all_items = sales_engine.items.all
     @all_item_prices = all_items.map{|item| item.unit_price}
-    avg_item_price =
     all_item_prices.reduce{|sum, num| sum + num}.to_f/ all_item_prices.count
   end
 
@@ -120,9 +119,8 @@ class SalesAnalyst
 
   def top_days_by_invoice_count
     mean = average_sales_per_day
-    days = day_count.find_all do |day, num|
-      (num - mean) > average_sales_per_day_standard_deviation
-    end.flatten
+    days = day_count.find_all{|day, num|
+      (num - mean) > average_sales_per_day_standard_deviation}.flatten
     days.select.with_index{|item, index| index.even?}
   end
 
