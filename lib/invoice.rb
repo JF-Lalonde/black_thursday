@@ -24,8 +24,7 @@ class Invoice
   end
 
   def merchant
-    @invoice_repo.invoice_middle_output(self.merchant_id)
-    #name methods the same
+    @invoice_repo.merchant_from_invoice(self.merchant_id)
   end
 
   def transactions

@@ -32,6 +32,6 @@ class Item
   end
 
   def merchant
-    @item_repo.merchant(merchant_id)
+    @item_repo.merchant_from_item(merchant_id)
   end
 end

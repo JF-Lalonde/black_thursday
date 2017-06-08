@@ -12,14 +12,14 @@ class Merchant
   end
 
   def items
-    @merch_repo.item_output(id)
+    merch_repo.item_from_merch(id)
   end
 
   def invoices
-    @merch_repo.invoice_output(id)
+    merch_repo.invoices_from_merch(id)
   end
 
   def customers
-    @merch_repo.customers_from_merchant(id)
+    merch_repo.customers_from_merchant(id)
   end
 end

@@ -1,10 +1,18 @@
 require_relative 'test_helper'
 require_relative '../lib/customer_repository'
+require_relative '../lib/sales_engine'
 
 class CustomerRepositoryTest < Minitest::Test
-  attr_reader :cr
 
   def setup
+  @se = SalesEngine.from_csv({
+        :items => "./test/data/items_truncated.csv",
+        :merchants => "./test/data/merchants_truncated.csv",
+        :invoice_items => "./test/data/invoice_items_truncated.csv",
+        :invoices => "./test/data/invoices_truncated.csv",
+        :transactions => "./test/data/transactions_truncated.csv",
+        :customers => "./test/data/customers_truncated.csv"
+      })
     @cr = CustomerRepository.new({customers: "./test/data/customers_truncated.csv"}, self)
   end
 
@@ -39,5 +47,12 @@ class CustomerRepositoryTest < Minitest::Test
     expected = [@cr.all[14], @cr.all[15], @cr.all[31]]
 
     assert_equal expected, actual
+  end
+
+  def test_merchants_from_customer_returns_merchants
+    customer = @se.customers.find_by_id(1)
+    actual = customer.merchants[0].class
+
+    assert_equal Merchant, actual
   end
 end
