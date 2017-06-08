@@ -70,7 +70,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_item_price_for_merchant
-    merch_items = @sa.sales_engine.item_output(12334105)
+    merch_items = @sa.sales_engine.item_from_merch(12334105)
     item_prices = merch_items.map{|item| item.unit_price.to_i}
     avg_item_price = item_prices.reduce{|sum, num| sum + num}/ item_prices.count
 

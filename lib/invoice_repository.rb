@@ -8,9 +8,9 @@ class InvoiceRepository
   attr_reader :sales_engine,
               :all_invoice_data
 
-  # def inspect
-  #   "#<#{self.class} #{@all_invoice_data.size} rows>"
-  # end
+  def inspect
+    "#<#{self.class} #{@all_invoice_data.size} rows>"
+  end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine

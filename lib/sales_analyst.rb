@@ -33,7 +33,7 @@ class SalesAnalyst
   end
 
   def average_item_price_for_merchant(merchant_id)
-    merch_items = sales_engine.item_output(merchant_id)
+    merch_items = sales_engine.item_from_merch(merchant_id)
     item_prices = []
       merch_items.find_all{|item| item_prices << item.unit_price}
       if item_prices.count > 0

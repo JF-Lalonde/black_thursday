@@ -66,7 +66,6 @@ class ItemRepositoryTest < Minitest::Test
     actual = result.count
 
     assert_equal 2, actual
-
   end
 
   def test_it_can_find_all_by_price_in_range
@@ -79,12 +78,12 @@ class ItemRepositoryTest < Minitest::Test
   def test_it_can_find_all_by_merchant_id
     result = @item.find_all_by_merchant_id(12334195)
     actual = result.count
+
     assert_equal 12, actual
   end
 
   def test_merchant_method_returns_item_value
     item = @se.items.find_by_id(263395237)
-
     actual = item.merchant.id
     expected = 12334141
 
