@@ -93,9 +93,8 @@ class SalesAnalyst
   def top_merchants_by_invoice_count
     std_devs = (average_invoices_per_merchant_standard_deviation * 2)
     mean = average_invoices_per_merchant
-    sales_engine.merchants.all_merchant_data.find_all do |merchant|
-      (merchant.invoices.count - mean) > std_devs
-    end
+    sales_engine.merchants.all_merchant_data.find_all{|merchant|
+      (merchant.invoices.count - mean) > std_devs}
   end
 
   def bottom_merchants_by_invoice_count
@@ -123,10 +122,8 @@ class SalesAnalyst
     mean = average_sales_per_day
     days = day_count.find_all do |day, num|
       (num - mean) > average_sales_per_day_standard_deviation
-    end
-    days = days.map do |day|
-      (day.join.to_s[0..-4]).split
     end.flatten
+    days.select.with_index{|item, index| index.even?}
   end
 
   def calculate_invoice_percentages

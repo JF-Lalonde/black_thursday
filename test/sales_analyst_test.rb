@@ -175,11 +175,8 @@ class SalesAnalystTest < Minitest::Test
     mean = @sa.average_sales_per_day
     actual = @sa.day_count.find_all do |day, num|
       (num - mean) > @sa.average_sales_per_day_standard_deviation
-    end
-
-    actual = actual.map do |day|
-      (day.join.to_s[0..-3]).split
     end.flatten
+    actual = actual.select.with_index{|item, index| index.even?}
 
     assert_equal ["Sunday"], actual
   end
