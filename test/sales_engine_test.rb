@@ -113,4 +113,23 @@ class SalesEngineTest < Minitest::Test
 
     assert_equal Merchant, actual
   end
+
+  def test_if_invoice_is_paid_in_full
+    invoice = @se.invoices.find_by_id(14)
+    actual = invoice.is_paid_in_full?
+
+    assert_equal true, actual
+
+    invoice = @se.invoices.find_by_id(13)
+    actual = invoice.is_paid_in_full?
+
+    assert_equal false, actual
+  end
+
+  def test_invoice_total
+    invoice = @se.invoices.find_by_id(14)
+    actual = invoice.total
+
+    assert_equal 22496.84, actual
+  end
 end

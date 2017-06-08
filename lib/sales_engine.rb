@@ -64,12 +64,18 @@ class SalesEngine
   def customers_from_merchant(id)
     invoices = @invoices.find_all_by_merchant_id(id)
     customer_ids = invoices.map{|invoice| invoice.customer_id}
-    customer_ids.map{|id| @customers.find_by_id(id)}.compact
+    customer_ids.map{|id| @customers.find_by_id(id)}.compact.uniq
   end
 
   def merchants_from_customer(id)
     invoices = @invoices.find_all_by_customer_id(id)
     merch_ids = invoices.map{|invoice| invoice.merchant_id}
     merch_ids.map{|id| @merchants.find_by_id(id)}.compact
+  end
+
+  def total_from_invoice(id)
+    invoice_items = @invoice_items.find_all_by_invoice_id(id)
+    item_totals = invoice_items.map{|item| item.unit_price * item.quantity}
+    item_totals.reduce(:+).round(2)
   end
 end

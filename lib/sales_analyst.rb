@@ -83,11 +83,11 @@ class SalesAnalyst
     end
   end
 
-  def average_invoices_per_merchant
+  def average_invoices_per_merchant #Fails spec harness
     @invoices_per_merch =
     @sales_engine.merchants.all_merchant_data.map{|merchant| merchant.invoices.count}
-    invoices_per_merch.reduce{|sum, num| sum + num}.to_f /
-    invoices_per_merch.count
+    (invoices_per_merch.reduce{|sum, num| sum + num}.to_f /
+    invoices_per_merch.count).round(2)
   end
 
   def average_invoices_per_merchant_standard_deviation
@@ -126,11 +126,26 @@ class SalesAnalyst
 
   def top_days_by_invoice_count #Fix this later
     mean = average_sales_per_day
-    days = @sa.day_count.find_all do |day, num|
+    days = @day_count.find_all do |day, num|
       (num - mean) > average_sales_per_day_standard_deviation
     end
     days = days.map do |day|
-      (day.join.to_s[0..-3]).split
+      (day.join.to_s[0..-4]).split
     end.flatten
+  end
+
+  def calculate_invoice_percentages
+    invoice_status =
+    @sales_engine.invoices.all.map{|invoice| invoice.status}
+    invoice_status =
+    invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
+    sum = invoice_status.values.inject(:+)
+    invoice_status.each_with_object(Hash.new(0)) do |(stat, num), hash|
+      hash[stat] = num * 100.0 / sum
+    end
+  end
+
+  def invoice_status(status)
+    calculate_invoice_percentages[status].round(2)
   end
 end

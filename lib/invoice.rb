@@ -33,14 +33,16 @@ class Invoice
   end
 
   def customer
-    @invoice_repo.customer_from_invoice(id)
+    @invoice_repo.customer_from_invoice(customer_id)
   end
 
   def is_paid_in_full?
-
+    transactions.any?{|trans| trans.result == "success"}
   end
 
   def total
-
+    if is_paid_in_full?
+      @invoice_repo.total_from_invoice(id)
+    end
   end
 end

@@ -185,16 +185,21 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_invoice_status
-    invoice_status = @sa.sales_engine.invoices.all.map do |invoice|
-      invoice.status
-    end
-    invoice_status = invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
+    invoice_status =
+    @sa.sales_engine.invoices.all.map{|invoice| invoice.status}
+    invoice_status =
+    invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
     sum = invoice_status.values.inject(:+)
     actual = invoice_status.each_with_object(Hash.new(0)) do |(stat, num), hash|
       hash[stat] = num * 100.0 / sum
     end
     expected = {:pending=>32.4, :shipped=>54.4, :returned=>13.2}
-    
+
     assert_equal expected, actual
+
+    actual = @sa.invoice_status(:pending)
+
+    assert_equal 32.4, actual
   end
+
 end
