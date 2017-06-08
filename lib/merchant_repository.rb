@@ -8,7 +8,7 @@ class MerchantRepository
               :sales_engine
 
   def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
+    "#<#{self.class} #{@all_merchant_data.size} rows>"
   end
 
   def initialize(data_files, sales_engine)

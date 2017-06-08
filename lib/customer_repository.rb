@@ -8,7 +8,7 @@ class CustomerRepository
               :all_customer_data
 
   def inspect
-    "#<#{self.class} #{@items.size} rows>"
+    "#<#{self.class} #{@all_customer_data.size} rows>"
   end
 
   def initialize(data_files, sales_engine)

@@ -9,8 +9,7 @@ class InvoiceRepository
               :all_invoice_data
 
   def inspect
-    "#<#{self.class} #{@items.size} rows>"
-    "#<#{self.class} #{@merchants.size} rows>"
+    "#<#{self.class} #{@all_invoice_data.size} rows>"
   end
 
   def initialize(data_files, sales_engine)

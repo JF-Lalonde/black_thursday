@@ -8,7 +8,7 @@ class TransactionRepository
               :all_transactions
 
   def inspect
-    "#<#{self.class} #{@items.size} rows>"
+    "#<#{self.class} #{@all_transactions.size} rows>"
   end
 
   def initialize(data_files, sales_engine)

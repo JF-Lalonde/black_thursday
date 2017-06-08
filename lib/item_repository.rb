@@ -8,7 +8,7 @@ class ItemRepository
               :sales_engine
 
   def inspect
-    "#<#{self.class} #{@items.size} rows>"
+    "#<#{self.class} #{@all_item_data.size} rows>"
   end
 
   def initialize(data_files, sales_engine)
