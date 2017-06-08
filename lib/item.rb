@@ -21,17 +21,17 @@ class Item
   @id = item_data[:id].to_i
   @name = item_data[:name]
   @description = item_data[:description]
-  @unit_price = ((item_data[:unit_price].to_f)/ 100).to_d
+  @unit_price = unit_price_to_dollars(item_data[:unit_price].to_d)
   @created_at = Time.parse(item_data[:created_at].to_s)
   @updated_at = Time.parse(item_data[:updated_at].to_s)
   @merchant_id = item_data[:merchant_id].to_i
   end
 
-  def unit_price_to_dollars
-    @unit_price = '%.02f' % (unit_price.to_f)
+  def unit_price_to_dollars(price)
+    price / 100
   end
 
   def merchant
-    @item_repo.merchant(merchant_id)
+    @item_repo.merchant_from_item(merchant_id)
   end
 end

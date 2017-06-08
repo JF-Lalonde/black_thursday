@@ -3,9 +3,16 @@ require_relative '../lib/item_repository'
 require_relative '../lib/sales_engine'
 
 class ItemRepositoryTest < Minitest::Test
-  attr_reader :item
 
   def setup
+    @se = SalesEngine.from_csv({
+          :items => "./test/data/items_truncated.csv",
+          :merchants => "./test/data/merchants_truncated.csv",
+          :invoice_items => "./test/data/invoice_items_truncated.csv",
+          :invoices => "./test/data/invoices_truncated.csv",
+          :transactions => "./test/data/transactions_truncated.csv",
+          :customers => "./test/data/customers_truncated.csv"
+        })
     @item = ItemRepository.new({
                   :items     => "./test/data/items_truncated.csv",
                   :merchants => "./test/data/merchants_truncated.csv"
@@ -59,7 +66,6 @@ class ItemRepositoryTest < Minitest::Test
     actual = result.count
 
     assert_equal 2, actual
-
   end
 
   def test_it_can_find_all_by_price_in_range
@@ -72,16 +78,12 @@ class ItemRepositoryTest < Minitest::Test
   def test_it_can_find_all_by_merchant_id
     result = @item.find_all_by_merchant_id(12334195)
     actual = result.count
+
     assert_equal 12, actual
   end
 
   def test_merchant_method_returns_item_value
-  se = SalesEngine.from_csv({
-    :items     => "./test/data/items_truncated.csv",
-    :merchants => "./test/data/merchants_truncated.csv"
-    })
-    item = se.items.find_by_id(263395237)
-
+    item = @se.items.find_by_id(263395237)
     actual = item.merchant.id
     expected = 12334141
 

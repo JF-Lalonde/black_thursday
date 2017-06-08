@@ -27,28 +27,55 @@ class SalesEngine
     SalesEngine.new(data_files)
   end
 
-  def merchant_output(merchant_id)
-    @merchants.find_by_id(merchant_id)
+  def merchant_from_item(merchant_id)
+    merchants.find_by_id(merchant_id)
   end
 
-  def item_output(merch_id)
-    @items.find_all_by_merchant_id(merch_id)
+  def item_from_merch(merch_id)
+    items.find_all_by_merchant_id(merch_id)
   end
 
-  # def customer_output(id)
-  #   @merchants.find_by_id(id)
-  # end
-
-  def invoice_output(id)
-    invoice_items_list = @invoice_items.find_all_by_invoice_id(id)
+  def merchant_from_invoice(id)
+    merchants.find_by_id(id)
   end
 
-  def invoice_output(id)
-    @merchants.find_by_id(id)
+  def invoices_from_merch(id)
+    invoices.find_all_by_merchant_id(id)
   end
 
-  def merch_out_from_invoice(id)
-    @invoices.find_all_by_merchant_id(id)
+  def items_from_invoice(id)
+    invoice_items = @invoice_items.find_all_by_invoice_id(id)
+    item_ids = invoice_items.map{|item| item.item_id}
+    item_ids.map{|item| items.find_by_id(item)}.compact
   end
 
+  def transactions_from_invoice(id)
+    @transactions.find_all_by_invoice_id(id)
+  end
+
+  def customer_from_invoice(id)
+    @customers.find_by_id(id)
+  end
+
+  def invoice_from_transaction(invoice_id)
+    invoices.find_by_id(invoice_id)
+  end
+
+  def customers_from_merchant(id)
+    invoices = @invoices.find_all_by_merchant_id(id)
+    customer_ids = invoices.map{|invoice| invoice.customer_id}
+    customer_ids.map{|id| @customers.find_by_id(id)}.compact.uniq
+  end
+
+  def merchants_from_customer(id)
+    invoices = @invoices.find_all_by_customer_id(id)
+    merch_ids = invoices.map{|invoice| invoice.merchant_id}
+    merch_ids.map{|id| merchants.find_by_id(id)}.compact
+  end
+
+  def total_from_invoice(id)
+    invoice_items = @invoice_items.find_all_by_invoice_id(id)
+    item_totals = invoice_items.map{|item| item.unit_price * item.quantity}
+    item_totals.reduce(:+).round(2)
+  end
 end

@@ -8,10 +8,9 @@ class InvoiceRepository
   attr_reader :sales_engine,
               :all_invoice_data
 
-  # def inspect
-  #   "#<#{self.class} #{@items.size} rows>"
-  #   "#<#{self.class} #{@merchants.size} rows>"
-  # end
+  def inspect
+    "#<#{self.class} #{@all_invoice_data.size} rows>"
+  end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
@@ -39,12 +38,23 @@ class InvoiceRepository
     @all_invoice_data.find_all{|invoice| invoice.status == status}
   end
 
-
-  def items_to_engine(id)
-  end
-  
-  def invoice_middle_output(id)
-    @sales_engine.invoice_output(id)
+  def items_from_invoice(id)
+    @sales_engine.items_from_invoice(id)
   end
 
+  def merchant_from_invoice(id)
+    @sales_engine.merchant_from_invoice(id)
+  end
+
+  def transactions_from_invoice(id)
+    @sales_engine.transactions_from_invoice(id)
+  end
+
+  def customer_from_invoice(id)
+    @sales_engine.customer_from_invoice(id)
+  end
+
+  def total_from_invoice(id)
+    @sales_engine.total_from_invoice(id)
+  end
 end

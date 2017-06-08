@@ -7,9 +7,9 @@ class TransactionRepository
   attr_reader :sales_engine,
               :all_transactions
 
-  # def inspect
-  #   "#<#{self.class} #{@items.size} rows>"
-  # end
+  def inspect
+    "#<#{self.class} #{@all_transactions.size} rows>"
+  end
 
   def initialize(data_files, sales_engine)
     @sales_engine = sales_engine
@@ -37,4 +37,7 @@ class TransactionRepository
     @all_transactions.find_all{|trans| trans.result == result}
   end
 
+  def invoice_from_transaction(invoice_id)
+    @sales_engine.invoice_from_transaction(invoice_id)
+  end
 end

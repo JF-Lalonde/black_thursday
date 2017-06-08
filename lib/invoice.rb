@@ -20,11 +20,28 @@ class Invoice
   end
 
   def items
-    # @invoice_repo.items_to_engine(id)
-    end
-    
+    @invoice_repo.items_from_invoice(id)
+  end
+
   def merchant
-    @invoice_repo.invoice_middle_output(self.merchant_id)
-    #name methods the same
+    @invoice_repo.merchant_from_invoice(self.merchant_id)
+  end
+
+  def transactions
+    @invoice_repo.transactions_from_invoice(id)
+  end
+
+  def customer
+    @invoice_repo.customer_from_invoice(customer_id)
+  end
+
+  def is_paid_in_full?
+    transactions.any?{|trans| trans.result == "success"}
+  end
+
+  def total
+    if is_paid_in_full?
+      @invoice_repo.total_from_invoice(id)
+    end
   end
 end

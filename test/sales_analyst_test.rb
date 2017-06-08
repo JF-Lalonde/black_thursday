@@ -70,20 +70,28 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_item_price_for_merchant
-    merch_items = @sa.sales_engine.item_output(12334105)
+    merch_items = @sa.sales_engine.item_from_merch(12334105)
     item_prices = merch_items.map{|item| item.unit_price.to_i}
     avg_item_price = item_prices.reduce{|sum, num| sum + num}/ item_prices.count
 
     assert_equal 29, avg_item_price
   end
 
-  def test_average_average_price_per_merchant
+  def test_find_all_merchant_ids
     merchants = @sa.sales_engine.merchants.all
-    merch_ids = merchants.map do |merchant|
+    actual = merchants.map do |merchant|
       merchant.id.to_i
     end
+    actual = actual.count
+    assert_equal 50, actual
+
+    actual = actual.class
+    assert_equal Fixnum, actual
+  end
+
+  def test_average_average_price_per_merchant
     avg_prices = []
-    merch_ids.each do |merchant_id|
+    @sa.find_all_merchant_ids.each do |merchant_id|
       if @sa.average_item_price_for_merchant(merchant_id) != nil
         avg_prices << @sa.average_item_price_for_merchant(merchant_id)
       end
@@ -175,26 +183,28 @@ class SalesAnalystTest < Minitest::Test
     mean = @sa.average_sales_per_day
     actual = @sa.day_count.find_all do |day, num|
       (num - mean) > @sa.average_sales_per_day_standard_deviation
-    end
-
-    actual = actual.map do |day|
-      (day.join.to_s[0..-3]).split
     end.flatten
+    actual = actual.select.with_index{|item, index| index.even?}
 
     assert_equal ["Sunday"], actual
   end
 
   def test_invoice_status
-    invoice_status = @sa.sales_engine.invoices.all.map do |invoice|
-      invoice.status
-    end
-    invoice_status = invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
+    invoice_status =
+    @sa.sales_engine.invoices.all.map{|invoice| invoice.status}
+    invoice_status =
+    invoice_status.reduce(Hash.new(0)){|status, num| status[num] += 1; status}
     sum = invoice_status.values.inject(:+)
     actual = invoice_status.each_with_object(Hash.new(0)) do |(stat, num), hash|
       hash[stat] = num * 100.0 / sum
     end
     expected = {:pending=>32.4, :shipped=>54.4, :returned=>13.2}
-    
+
     assert_equal expected, actual
+
+    actual = @sa.invoice_status(:pending)
+
+    assert_equal 32.4, actual
   end
+
 end

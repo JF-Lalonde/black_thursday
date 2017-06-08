@@ -5,7 +5,7 @@ class TransactionRepositoryTest < Minitest::Test
   attr_reader :tr
 
   def setup
-    @tr = TransactionRepository.new("./test/data/transactions_truncated.csv", self)
+    @tr = TransactionRepository.new({transactions: "./test/data/transactions_truncated.csv"}, self)
   end
 
   def test_transaction_repo_instantiates
